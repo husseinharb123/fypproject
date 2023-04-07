@@ -1,0 +1,22 @@
+
+.services-category {
+  margin: 5rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  place-items: center;
+  text-align: center;
+}
+
+.services-category .service {
+  margin: 1rem 0;
+}
+
+.service .icon {
+  font-size: 2.5rem;
+}
+
+.service .sub-heading {
+  color: var(--text-secondary);
+}
+
+

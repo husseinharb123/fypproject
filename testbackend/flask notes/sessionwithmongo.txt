@@ -1,0 +1,50 @@
+import bcrypt 
+from flask  import *
+import pymongo
+
+conn_str = 'mongodb+srv://m001-student:m001-mongodb-basics@sandbox.ewdiggs.mongodb.net/?retryWrites=true&w=majority'
+client = pymongo.MongoClient(conn_str)
+db =client.database
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'any secret string'
+
+@app.route('/',methods=['POST','GET'])
+def home ():
+    if 'username' in session:
+        return f'hello {session["username"]}'
+    return  render_template('register.html')
+
+@app.route('/register' ,methods =['GET','POST'])
+def register():
+    username = request.form['username']
+    password = request.form['password']
+    checkuser = db.username.find_one({'username':username})
+    if checkuser:
+        return 'already registered'
+    hashedpas = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    db.username.insert_one({'username':username ,'password':hashedpas})
+    return render_template('login.html')
+
+@app.route('/test' ,methods =['GET','POST'])
+def test():
+    return render_template('login.html')   
+    
+@app.route('/login',methods=['GET','POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    checkuser = db.username.find_one({'username':username})
+    if checkuser:
+        hashed = checkuser['password']
+        bcrypt.checkpw(password.encode('utf-8'), hashed)
+        session['username'] = username
+        return f" hello {username}"
+    return 'invalid username/password'
+
+@app.route('/logout',methods=['GET','POST'])
+def logout():
+    session.pop('username',None)
+    return 'logout successful'
+
+if __name__ == '__main__':
+    app.run('localhost',8070,debug=True)

@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=Source+Sans+Pro:wght@300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Roboto+Slab:wght@300&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    /*  Fonts  */
+    --ff-ps: "PT Sans", sans-serif;
+    --ff-ss: "Source Sans Pro", sans-serif;
+    --ff-rs: "Roboto Slab", serif;
+    --ff-os: 'Open Sans', sans-serif;
+    /*  Colors  */
+    --title-red: hsl(7, 100%, 65%);
+    --title-orange: hsl(34, 100%, 62%);
+    --title-yellow: hsl(52, 100%, 62%);
+    --title-aqua: hsl(171, 100%, 62%);
+    --title-green: hsl(154, 61%, 49%);
+    --title-pink: hsl(306, 89%, 68%);
+    --title-purple: hsl(270, 100%, 62%);
+    --title-blue: hsl(224, 100%, 62%);
+    font-size: 16px;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--ff-ss);
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+.container {
+    width: 75%;
+    max-width: 1200px;
+}
+
+.landing {
+    position: relative;
+    z-index: 1;
+    color: white;
+}
+
+.bg {
+    position: absolute;
+    background-image: url("2.jpg");
+    /*   background-image:url("https://source.unsplash.com/l3N9Q27zULw"); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: max(100vh, 35rem);
+    width: 100%;
+    z-index: -1;
+}
+
+.bg::before {
+    content: "";
+    position: absolute;
+    height: max(100vh, 35rem);
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /*   z-index: -1; */
+}
+
+.landing-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: max(100vh, 35rem);
+    /*   width:50%; */
+}
+
+.landing-title {
+    font-family: var(--ff-ps);
+    font-weight: 900;
+    font-size: calc(min(3rem, calc(3vw + 2rem)));
+    margin-bottom: 1em;
+    width: 60%;
+}
+
+.landing-description {
+    font-size: 1.2rem;
+    width: 50%;
+    margin-bottom: 1em;
+}
+
+.purchase-button {
+    display: inline-block;
+    width: fit-content;
+    border: 0;
+    padding: 0.5em 1em;
+    font-size: 1.2rem;
+    text-align: center;
+    border-radius: 0.4em;
+    font-size: bolder;
+}
+
+.purchase-button a {
+    color: black;
+    text-decoration: none;
+    font-weight:bolder
+}
+
+.purchase-button:hover,
+.purchase-button:focus {
+    opacity: 0.6;
+}
+
+@media(max-width:650px) {
+    .landing-title,
+    .landing-description {
+        width: 100%;
+        text-align: center;
+    }
+    .landing-flex {
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 450px) {
+    .container {
+        width: 90%;
+    }
+}
+
+
+.logo img{
+
+width: 150px;
+border-radius:5px 30px 30px 5px;
+
+}

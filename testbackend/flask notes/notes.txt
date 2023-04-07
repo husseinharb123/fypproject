@@ -1,0 +1,72 @@
+###################cookies 
+
+
+print(request.cookies.get('username') )
+res = make_response('home page')
+#res.set_cookie('last name','harb',expires=0) # this a way to delete a cookie
+# res.set_cookie('username','hussein',max_age= 2) # this way to set an expiratino (ms)
+# res.delete_cookie('username') to delete 
+res.set_cookie('last name','harb',httponly=True) # dont allow to view through chrome Console
+
+
+####################for handling csrf attacks
+
+pip install Flask-WTF
+from flask_wtf.csrf import CSRFProtect,CSRFError
+
+app.config['SECRET_KEY'] = 'any secret string'   app.secret_key = 'secret world'
+
+import secrets
+app.config['SECRET_KEY'] = secrets.token_hex(16)
+                           secrets.token_urlsafe(12)
+
+csrf = CSRFProtect(app)
+csrf.init_app(app)
+
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return make_response(e.description)
+
+<form method="post" action="http://localhost:8070/test">
+    <input type="hidden" name="lastname">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <button>checkit</button>
+</form>
+@csrf.exempt  // cancel secutity on this route
+
+
+################sessions
+session['username']  = username  //add session
+session.pop('username',None)  delete 
+
+############ bcrypt
+pip install bcrypt
+
+>>> import bcrypt
+>>> password = b"super secret password"
+>>> # Hash a password for the first time, with a randomly-generated salt
+>>> hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+>>> # Check that an unhashed password matches one that has previously been
+>>> # hashed
+>>> if bcrypt.checkpw(password, hashed):
+...     print("It Matches!")
+... else:
+...     print("It Does not Match :(")
+
+
+#################JWT Setup
+The auth workflow works as follows:
+Client provides email and password, which is sent to the server
+Server then verifies that email and password are correct and responds with an auth token
+Client stores the token and sends it along with all subsequent requests to the API
+Server decodes the token and validates it
+This cycle repeats until the token expires or is revoked. In the latter case, 
+the server issues a new token.
+
+
+######use random secret
+import os  os.urandom(12)
+
+import uuid 
+uuid.uuid4().hex 

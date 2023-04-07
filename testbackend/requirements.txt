@@ -1,0 +1,47 @@
+function SearchPage() {
+  const [query, setQuery] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [category, setCategory] = useState('');
+  const [rating, setRating] = useState('');
+  const [sortBy, setSortBy] = useState('');
+  const [inStock, setInStock] = useState(false);
+  const [fastDelivery, setFastDelivery] = useState(false);
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      const url = `/search?q=${query}&max_price=${maxPrice}&category=${category}&rating=${rating}&sort_by=${sortBy}&in_stock=${inStock}&fast_delivery=${fastDelivery}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      setResults(data);
+    };
+    fetchResults();
+  }, [query, maxPrice, category, rating, sortBy, inStock, fastDelivery]);
+
+  const handleQueryChange = event => {
+    setQuery(event.target.value);
+  };
+
+  const handleMaxPriceChange = event => {
+    setMaxPrice(event.target.value);
+  };
+
+  const handleCategoryChange = event => {
+    setCategory(event.target.value);
+  };
+
+  const handleRatingChange = event => {
+    setRating(event.target.value);
+  };
+
+  const handleSortByChange = event => {
+    setSortBy(event.target.value);
+  };
+
+  const handleInStockChange = event => {
+    setInStock(event.target.checked);
+  };
+
+  const handleFastDeliveryChange = event => {
+    setFastDelivery(event.target.checked);
+  };

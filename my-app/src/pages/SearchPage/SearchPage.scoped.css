@@ -1,0 +1,37 @@
+
+main {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+
+@media screen and (max-width: 650px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}
+
+section.main-section {
+  flex-grow: 1;
+  margin-top: 1rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.heading-3{
+    font-weight: bold;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    padding: 6px;
+    margin-left: 15px;
+}

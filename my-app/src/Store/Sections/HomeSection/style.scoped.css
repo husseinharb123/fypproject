@@ -1,0 +1,50 @@
+.animated-div {
+    width: 100%;
+    background-color: #fafafa;
+    padding: 20px;
+    text-align: center;
+    animation: slide-in 1s ease-out;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+  }
+  
+  @keyframes slide-in {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+  }
+  
+  .animated-div h2 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .animated-div p {
+    font-size: 18px;
+    color: #666;
+    line-height: 1.5;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    animation: text-color 2s infinite;
+  }
+  
+  @keyframes text-color {
+    0% {
+      color: #666;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+      color: #FFA500;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      color: #666;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  }

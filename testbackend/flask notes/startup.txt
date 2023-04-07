@@ -1,0 +1,154 @@
+pip install virtualenv
+create virtual enviroment ==> virtualenv env
+activeit ==> env\scripts\activate.bat
+deactivate
+install flask ==> pip install flask 
+pip show flask
+lanuch application ==> flask run  or python app.py
+ pip freeze >requirements.txt
+https://editor.swagger.io/
+
+FLASK_ENV=development
+FLASK_DEBUG=1
+pip install -U py-mon
+pip install watchdog
+pymon filename.py
+
+python -m openapi_server
+
+curl -X GET http://localhost:8070/users/1234
+
+
+json to dic 
+   import json
+   data = json.load(json_file)
+
+ dictionary to a JSON string
+   import json 
+   json_object = json.dumps(dictionary)
+
+import json
+from bson import ObjectId,json_util
+jsonver = json.dumps(resdata)
+json.loads(json_util.dumps(resdata)) 
+
+pip install pymongo
+pip install pymongo[srv]
+from bson.json_util import dumps
+conn_str = 'mongodb+srv://m001-student:m001-mongodb-basics@sandbox.ewdiggs.mongodb.net/?retryWrites=true&w=majority'
+client = pymongo.MongoClient(conn_str)
+    db = client.test
+    mycol = db.child
+    #mycol.insert_many([{'name':'mohamad'},{'name':'ali'}])
+    result = mycol.find({},{'_id':0,'name':1}).sort('name',1)
+    list_of_dic= list(result) # list of dic
+    #json_data = dumps(list_of_dic) # convert to json
+    return render_template('index.html',lst=list_of_dic)
+
+
+Flask-RESTful==0.3.8
+PyJWT==1.7.1
+Flask-SQLAlchemy==2.4.1
+
+
+pip install -r requirements.txt // you can install the above using this code
+
+
+
+For most cases, we use the localStorage object if we want some data to be on the browser. If we want it on the server, 
+then we use cookies, and the sessionStorage is used when we want to destroy the data whenever 
+that specific tab gets closed or the season is closed by the user
+
+
+
+
+
+@app.route(‘/hello’)
+def hello_world():
+   return ‘hello world’
+
+def hello_world(): equivalent to above
+   return ‘hello world’
+app.add_url_rule(‘/’, ‘hello’, hello_world)
+
+URL dynamically  
+@app.route('/test/<testit>',methods=['GET'])
+def home(testit):
+    return testit
+
+@app.route('/blog/<int:postID>')
+def show_blog(postID):
+   return 'Blog Number %d' % postID
+
+@app.route('/rev/<float:revNo>')
+def revision(revNo):
+   return 'Revision Number %f' % revNo
+
+
+def test1():
+    if request.method == 'POST':
+        name = request.form['hi']
+        return name
+    else:
+        name = request.args.get('hi')
+        return 'get : {name}'
+jinj template engine
+{% ... %} for Statements
+{{ ... }} for Expressions to print to the template output
+{# ... #} for Comments not included in the template output
+      {% if marks>50 %}
+         <h1> Your result is pass!</h1>
+      {% else %}
+         <h1>Your result is fail</h1>
+      {% endif %}
+
+   dict = {'phy':50,'che':60,'maths':70}
+   return render_template('result.html', result = dic)
+            {% for key, value in result.items() %}
+            <tr>
+               <th> {{ key }} </th>
+               <td> {{ value }} </td>
+            </tr>
+         {% endfor %}
+<script type = "text/javascript" src = "{{ url_for('static', filename = 'hello.js') }}" ></script>
+
+abort(500)
+
+
+npm install @openapitools/openapi-generator-cli -g
+npm install @openapitools/openapi-generator-cli -D
+
+openapi-generator-cli generate -i openapi.yaml -g python-flask -o codegen_server/
+openapi-generator-cli generate -i openapi.yaml -g python -o codegen_client/
+
+
+from connexion.lifecycle import ConnexionResponse
+def post_order(platform, open_req=None): 
+    """order
+
+    """
+    return ConnexionResponse(
+        status_code=200,
+        content_type='text/plain',
+        body='do some magic!'
+    )
+
+
+
+request.data Contains the incoming request data as string in case it came with a mimetype Flask does not handle.
+
+request.args: the key/value pairs in the URL query string
+request.form: the key/value pairs in the body, from a HTML post form, or JavaScript request that isn't JSON encoded
+request.files: the files in the body, which Flask keeps separate from form. HTML forms must use enctype=multipart/form-data or files will not be uploaded.
+request.values: combined args and form, preferring args if keys overlap
+request.json: parsed JSON data. The request must have the application/json content type, or use request.get_json(force=True) to ignore the content type.
+All of these are MultiDict instances (except for json). You can access values using:
+
+request.form['name']: use indexing if you know the key exists
+request.form.get('name'): use get if the key might not exist
+request.form.getlist('name'): use getlist if the key is sent multiple times and you want a list of values. get only returns the first value.
+
+
+
+
+

@@ -1,0 +1,77 @@
+.headercontainer{
+	margin:auto
+}
+.logo img{
+
+width: 150px;
+
+}
+.header-links{
+text-decoration: none;
+color :rgb(19, 19, 19);
+font-weight: bolder;
+font-family: normal;
+}
+.header-links:hover{
+color:#5624d0;
+
+
+}
+
+.searchbar{
+    box-sizing: border-box;
+	height: 45px;
+	background-color: white;
+	border-radius: 30px;
+    border: 1px solid black;
+	display: flex;
+	align-items: center;
+    overflow: hidden;
+    padding:20px;
+    flex-basis: 35%;
+
+
+}
+
+.searchbar a >i {
+	color: rgb(143, 141, 141);
+
+}
+.searchbar > input{
+	height: 40px;
+	border: none;
+	outline: none;
+	padding-left: 10px;
+
+
+}
+
+
+
+
+
+.orders{
+font-size: small;
+color: black;
+border: 1px solid black;
+padding: 4px 9px ;
+display: flex;
+align-items: center;
+}
+
+.signin p{
+    text-align:center;
+    margin-top: 0;
+    margin-bottom: 0;
+
+}
+.signin{
+    margin-left:6px
+}
+
+.edgef{
+
+box-shadow: 5px 5px 10px rgba(164, 163, 163, 0.3);
+padding-left: 5px;
+padding-right: 15px;
+}

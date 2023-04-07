@@ -1,0 +1,83 @@
+//////////////////// MVC /////////////////
+
+-MVC is an architectural pattern consisting of three parts: Model, View, Controller.
+Model: Handles data logic.
+View: It displays the information from the model to the user.
+Controller: It controls the data flow into a model object and updates the view whenever data changes.
+-It is invented by Trygve Reenskau.
+
+- Even though it’s very popular and it does have some disadvantages, the main one is complexity.
+
+what is rest api
+Representational State Transfer (REST) is an architectural style that defines a set of constraints to be used for creating web services. REST API is a way of accessing web services in a simple and flexible way without having any processing
+It’s used to fetch or give some information from a web service. All communication done via REST API uses only HTTP request.
+A request is sent from client to server in the form of a web URL as HTTP GET or POST or PUT or DELETE request. After that, a response comes back from the server in the form of a resource which can be anything like HTML, XML, Image, or JSON. But now JSON is the most popular format being used in Web Services
+in HTTP there are five methods that are commonly used in a REST-based Architecture
+get ==> read
+post ==>create
+patch ==> update
+put ==> update/replace
+delete => delete
+GET: The HTTP GET method is used to read (or retrieve) a representation of a resource. In the safe path, GET returns a representation in XML or JSON and an HTTP response code of 200 (OK). In an error case, it most often returns a 404 (NOT FOUND) or 400 (BAD REQUEST)
+
+POST: The POST verb is most often utilized to create new resources. In particular, it’s used to create subordinate resources. That is, subordinate to some other (e.g. parent) resource. On successful creation, return HTTP status 201, returning a Location header with a link to the newly-created resource with the 201 HTTP status
+
+PUT: It is used for updating the capabilities. However, PUT can also be used to create a resource in the case where the resource ID is chosen by the client instead of by the server. In other words, if the PUT is to a URI that contains the value of a non-existent resource ID. On successful update, return 200 (or 204 if not returning any content in the body) from a PUT. If using PUT for create, return HTTP status 201 on successful creation. PUT is not safe operation but it’s idempotent.
+
+PATCH: It is used to modify capabilities. The PATCH request only needs to contain the changes to the resource, not the complete resource. This resembles PUT, but the body contains a set of instructions describing how a resource currently residing on the server should be modified to produce a new version. This means that the PATCH body should not just be a modified part of the resource, but in some kind of patch language like JSON Patch or XML Patch. PATCH is neither safe nor idempotent.
+DELETE: It is used to delete a resource identified by a URI. On successful deletion, return HTTP status 200 (OK) along with a response body.
+
+Idempotence: An idempotent HTTP method is a HTTP method that can be called many times without different outcomes
+
+
+What is Authentication? and How does Authorization work in REST WebServices?
+
+Authentication is a process to prove that you are the person you intend to be.
+For e.g. while logging into your email account, you prove that you are you by providing a Username and a Password. 
+If you have the Username and the Password you are who you profess to be. This is what Authentication means.
+
+In the context of REST API authentication happens using the HTTP Request.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1xx: Informational – Communicates transfer protocol-level information.
+2xx: Success – Indicates that the client’s request was accepted successfully.
+3xx: Redirection – Indicates that the client must take some additional action in order to complete their request.
+4xx: Client Error – This category of error status codes points the finger at clients.
+5xx: Server Error – The server takes responsibility for these error status codes.
+
+what is an api ?
+An API is a set of definitions and protocols for
+building and integrating application software.
+It’s sometimes referred to as a contract between an
+information provider and an information user—establishing
+the content required from the consume
+
+http methouds
+
+200 OK The request was successfully completed.
+201 Created A new resource was successfully created.
+400 Bad Request The request was invalid.
+401 Unauthorized The request did not include an authentication token or the authentication token was expired.
+403 Forbidden The client did not have permission to access the requested resource.
+404 Not Found The requested resource was not found.
+405 Method Not Allowed The HTTP method in the request was not supported by the resource. For example, the DELETE method cannot be used with the Agent API.
+409 Conflict The request could not be completed due to a conflict. For example, POST ContentStore Folder API cannot complete if the given file or folder name already exists in the parent location.
+500 Internal Server Error The request was not completed due to an internal error on the server side.
+503 Service Unavailable The server was unavailable.

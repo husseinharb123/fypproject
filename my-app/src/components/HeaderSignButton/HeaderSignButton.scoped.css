@@ -1,0 +1,21 @@
+.login{
+color: white;
+background-color: black;
+font-size: small;
+padding: 4px 10px ;
+border: 1px solid white;
+display: flex;
+align-items: center;
+ text-decoration: none;
+}
+
+.signin p{
+    text-align:center;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.signin{
+    margin-left:5px;
+
+}
