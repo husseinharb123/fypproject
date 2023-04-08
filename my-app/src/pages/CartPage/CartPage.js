@@ -95,9 +95,7 @@ export default function CartPage() {
       )}
     </div>
     <CartSummary
-      totalshipping={cartSummary.totalshipping}
-      subcost={cartSummary.subcost}
-      totalcosts={cartSummary.totalcosts}
+
       className="col-lg-4"
     />
   </div>

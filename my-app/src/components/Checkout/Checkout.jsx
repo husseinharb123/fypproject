@@ -74,11 +74,11 @@ export default function Checkout({ show, setShow, single, cartelementid,cartelem
 
     async function addmultipleorder(paymentmethod,status,paymentstatus,paymentdate) {
         const data ={
-            cartelementsid : cartelementsid,
-            paymentmethod : paymentmethod,
-            status: status,
-            paymentstatus: paymentstatus,
-            paymentdate:paymentdate
+            "cartelementsid" : cartelementsid,
+            "paymentmethod" : paymentmethod,
+            "status": status,
+            "paymentstatus": paymentstatus,
+            "paymentdate":paymentdate
         }
         axios.post("/addmultipleorder",data)
             .then(response => {
@@ -265,6 +265,7 @@ export default function Checkout({ show, setShow, single, cartelementid,cartelem
     };
 
     return (
+        
         <div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Body>
@@ -286,18 +287,17 @@ export default function Checkout({ show, setShow, single, cartelementid,cartelem
                     )}
                 </Modal.Body>
                 <Modal.Footer>
+                    
                     {step === 2 && (<>
                         <Button variant="secondary" onClick={handleBack}>
                             Back
                         </Button>
-                        <Button variant="primary" onClick={handleBack}>
+                        <Button variant="primary" onClick={handleDelivery}>
                         Delivery Now
                         </Button>
                         </>
                     )}
-                    <Button variant="secondary" onClick={handleClose}>
-                        Cancel
-                    </Button>
+
 
                     {step === 1 && (
                         <Button variant="primary" onClick={handleDelivery} disabled={paymentMethod === 'creditCard'}>
@@ -309,6 +309,9 @@ export default function Checkout({ show, setShow, single, cartelementid,cartelem
                             Next
                         </Button>
                     )}
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
 
                 </Modal.Footer>
             </Modal>

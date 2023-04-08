@@ -70,68 +70,58 @@ def signin():
     else:
         return jsonify({'responseSuccess':False})
 
-@app.route('/productdetail/<id>',methods = ['Get'])
-def getproductdetail(id=None):
-    response = None
-    response = db.product.find_one({'_id':ObjectId(id)})
-    if  response:
+@app.route('/productdetail/<id>', methods=['GET'])
+def get_product_detail(id=None):
+    response = db.product.find_one({'_id': ObjectId(id)})
+    if response:
         response['_id'] = str(response['_id'])
-        response['storeid']= str(response["storeid"])
-        for i  in range (len(response['review'])):
-            response['review'][i] = str(response['review'][i])
-        return jsonify({'responseSuccess':True,'productdetail':response})
+        response['storename'] = str(db.store.find_one({'_id': ObjectId(response["storeid"])})['storename'])
+        return jsonify(response)
     else:
-        return jsonify({'responseSuccess':False})
-@app.route('/leavereview',methods = ['Post'])
+        return jsonify('cannot fetch product details')
+
+@app.route('/leavereview', methods=['POST'])
 def leavereview():
-    bodydata = request.get_json()
-    response = db.product.find_one({'_id':ObjectId(bodydata.get('productid'))})
-    if  response:
-        response1 = db.review.insert_one({ 'review': bodydata.get('review'), 'productid': bodydata.get('productid'), 
-            'userid': bodydata.get('userid'),'rating':bodydata.get('rating'),'username':bodydata.get('username') })
-        if response1:
-            insertedid = response1.inserted_id
-            response = db.product.update_one({'_id':ObjectId(bodydata.get('productid'))},{"$push":{'review':insertedid}})
-            return jsonify({'responseSuccess':True})
-        else:   
-            
-            return jsonify({'responseSuccess':False})
+    review = request.json.get("review")
+    productid = request.json.get("productid")
+    userid = request.json.get("userid")
+    rating = request.json.get("rating")
+    username = request.json.get("username")
+    review_data = {
+        "review": review,
+        "productid": productid,
+        "userid": userid,
+        "rating": float(rating),
+        "username": username
+    }
 
-
-
-@app.route('/usersreview/<id>',methods = ['Get'])
-def getuserreviews(id=None):
-    response = None
-    response = db.product.find_one({'_id':ObjectId(id)})
-    if  response:
-        result = None
-        result = db.product.aggregate([
-            {
-                '$match': {
-                    '_id': response['_id']
-                }
-            }, {
-                '$lookup': {
-                    'from': 'review', 
-                    'localField': 'review', 
-                    'foreignField': '_id', 
-                    'as': 'result'
-                }
-            }, {
-                '$project': {
-                    'result': 1, 
-                    '_id': 0
-                }
-            }
-        ])
-        listresult =list (result)[0]['result']
-        for i in range(len(listresult)):
-            listresult[i]['_id'] = str(listresult[i]['_id'])
-            listresult[i]['productid'] = str(listresult[i]['productid'])
-        userreviewcount = len(listresult)
-        return jsonify({'responseSuccess':userreviewcount,'result':listresult})
+    response1 = db.review.insert_one(review_data)
+    if response1:
+        product = db.product.find_one({'_id': ObjectId(productid)})
+        numofreviews = len(float(db.review.find({'productid': productid})))
+        previosrating = product.get("rating", 0)
+        newrating = (previosrating * (numofreviews - 1) + float(rating)) / numofreviews
+        response = db.product.update_one({'_id': ObjectId(productid)},{"$set": {"rating": newrating}})
+        return jsonify({'responseSuccess': True})
     else:
-        return jsonify({'responseSuccess':0})
+        return jsonify({'responseSuccess': False})
+
+
+@app.route('/productreview/<id>', methods=['GET'])
+def productreview(id=None):
+    print(id)
+    reviews = db.review.find({'productid': id})
+    reviews_list = []
+    for review in reviews:
+        review["_id"] = str(review["_id"])
+        reviews_list.append(review)
+    
+    reviewcount = len(reviews_list) # Use len() to get the review count
+    
+    return jsonify({"reviewslist": reviews_list, 'reviewcount': reviewcount})
+
+
+
 
 
 @app.route('/CheckifstorenameExist',methods = ['post'])
@@ -454,6 +444,90 @@ def get_cart_elements():
     return jsonify(cart_elements)
 
 
+
+@app.route('/cartofstore', methods=['GET'])
+
+def get_cart_elementsofstore():
+    user_id = request.args.get('userid')
+    storeid = request.args.get('storeid')
+    cart_elements = list(db.cartelement.find({'userid': user_id,'storeid':storeid}))
+
+    listit = []
+    for cart_element in cart_elements:
+        listit.append(str(cart_element['_id']))
+
+    return jsonify(listit)
+
+
+
+
+
+
+
+@app.route('/cartsummarys' ,methods=['GET'])
+def cartsummarys():
+    user_id = request.args.get('userid')
+    storeid = request.args.get('storeid')
+    cart_elements = list(db.cartelement.find({'userid': user_id,'storeid':storeid}))
+    subcost = 0
+    shipping_cost = 0
+
+    
+    for cart in cart_elements:
+        product = db.product.find_one({'_id': ObjectId(cart['productid'])})
+        subcost += int (product['price']) * int (cart['quantity'])
+        shipping_cost += 3
+
+    totalshipping = shipping_cost
+    totalcosts = subcost + shipping_cost 
+    
+    return jsonify({
+        'subcost': subcost,
+        'totalshipping': totalshipping,
+        'totalcosts': totalcosts
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/storenames/<userid>', methods=['GET'])
+def get_storenames(userid):
+    cart_elements = list(db.cartelement.find({'userid': userid}))
+    storenames = {}
+    for cart_element in cart_elements:
+        store_id = cart_element['storeid']
+        store = db.store.find_one({'_id': ObjectId(store_id)})
+        storename = store['storename']
+        storenames[store_id] = storename
+
+    storenames_list = []
+    for store_id, store_name in storenames.items():
+        storenames_list.append({'store_id': store_id, 'store_name': store_name})
+
+    return jsonify(storenames_list)
+
+
+
+
+
+
+
+
+
+
 @app.route('/cart', methods=['POST'])
 def create_order():
     data = request.get_json()
@@ -538,6 +612,20 @@ def cartsummary(userid):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/wishlist', methods=['GET'])
 
 def get_wish_elements():
@@ -575,65 +663,58 @@ def get_order_elements():
 
     return jsonify(order_elements)
 
-
+from pymongo.errors import PyMongoError
 
 @app.route('/recievedorders', methods=['GET'])
 def get_orders():
-    try:
-        search_query = request.args.get('orderid', '')
-        page = int(request.args.get('page_number', 1))
-        order_status = request.args.get('orderStatus', '')
-        sort_type = request.args.get('sortType', '')
-        store_filter = request.args.get('store_filter', '')
-        orders_to_skip = (page - 1) * 10
 
-        query = {}
-        query['storeid'] = store_filter
-        if search_query:
-            query['orderid'] = {'$regex': search_query, '$options': 'i'}
-        if order_status:
-            query['status'] = order_status
+    search_query = request.args.get('orderid', '')
+    page = int(request.args.get('page_number', 1))
+    order_status = request.args.get('orderStatus', '')
+    sort_type = request.args.get('sortType', '')
+    store_filter = request.args.get('store_filter', '')
+    orders_to_skip = (page - 1) * 10
 
-        sort_key = 'date' if sort_type == 'recent' else '-date'
+    query = {}
+    query['storeid'] = store_filter
+    if search_query:
+        query['orderid'] = {'$regex': search_query, '$options': 'i'}
+    if order_status:
+        query['status'] = order_status
 
-        print("Query: ", query) # Added print statement for checking query
-        print("Sort Key: ", sort_key) # Added print statement for checking sort key
+    sort_key = 'date' if sort_type == 'recent' else '-date'
 
-        recievedorders = db.recievedorder.find(query).sort(sort_key).skip(orders_to_skip).limit(10)
+    print("Query: ", query)
+    print("Sort Key: ", sort_key)
 
-        total_orders = db.recievedorder.count_documents(query)
+    recievedorders = db.recievedorder.find(query).sort(sort_key).skip(orders_to_skip).limit(10)
+    print(recievedorders)
+    total_orders = db.recievedorder.count_documents(query)
+    
+    total_pages = (total_orders + 9) // 10
 
-        total_pages = (total_orders + 9) // 10
+    results = []
+    for recievedorder in recievedorders:
+        result = {}
+        result["orderid"] = str(recievedorder['orderid'])
+        result["status"] = recievedorder['status']
+        result["date"] = recievedorder['date']
+        result["paymentstatus"] = recievedorder['paymentstatus']
+        result["paymentdate"] = recievedorder['paymentdate']
+        total = 0
+        user = db.user.find_one({'_id': ObjectId(recievedorder["userid"])})
+        result["email"] = user['Email']
+        shippingprice = 0
+        for orderelementid in recievedorder['orderlist']:
+            orderelement = db.orderelement.find_one({'_id': ObjectId(orderelementid)})
+            price = orderelement['price']
+            quantity = orderelement['quantity']
+            shippingprice = int(orderelement["shipping"])
+            total += int(price) * int(quantity)
+        result['total'] = total + shippingprice
+        results.append(result)
 
-        results = []
-        for recievedorder in recievedorders:
-            result = {}
-            result["orderid"] = str(recievedorder['orderid'])
-            result["status"] = recievedorder['status']
-            result["date"] = recievedorder['date']
-            result["paymentstatus"] = recievedorder['paymentstatus']
-            result["paymentdate"] = recievedorder['paymentdate']
-            total = 0
-            user = db.user.find_one({'_id': ObjectId(recievedorder["userid"])})
-            result["email"] = user['Email']
-            shippingprice = 0
-            for orderelementid in recievedorder['orderlist']:
-                orderelement = db.orderelement.find_one({'_id': ObjectId(orderelementid)})
-                price = orderelement['price']
-                quantity = orderelement['quantity']
-                shippingprice = int(orderelement["shipping"])
-                total += int(price) * int(quantity)
-            result['total'] = total + shippingprice
-            results.append(result)
-
-        return jsonify({'results': results, 'totalPages': total_pages}), 200
-
-    except Exception as e:
-        print("Error: ", str(e)) # Added print statement for checking error
-        return jsonify({'error': str(e)}), 500
-
-
-
+    return jsonify({'results': results, 'totalPages': total_pages}), 200
 
 
 
@@ -763,7 +844,7 @@ def addcartelement():
     res = db.store.find_one({"_id":ObjectId(storeid)})
     shippingprice = res['shippingprice']
     # Insert the data into the MongoDB collection
-    post_data = {'userid': userid, 'productid': productid,'quantity':1,'shippingprice':shippingprice}
+    post_data = {'userid': userid, 'productid': productid,'quantity':1,'shippingprice':shippingprice,"storeid":storeid}
     result = db.cartelement.insert_one(post_data)
     
     # Return a JSON response indicating success or failure
@@ -1055,15 +1136,19 @@ def addsingleorder():
 
 
 
+
+
+
 @app.route('/addmultipleorder', methods=['POST'])
 def addmultipleorder():
     try:
         orderid = generate_random_id(10)
-        cartelementids = request.json['cartelementid'] # assuming cartelementid is a list of strings
+        cartelementids = request.json['cartelementsid'] # assuming cartelementid is a list of strings
         orderorderelementids = [] # List to store orderorderelementids
 
         for cartelementid in cartelementids:
             cartelement = db.cartelement.find_one({'_id': ObjectId(cartelementid)})
+            print(f'cartelement: {cartelement}')  # Added print statement for checking cartelement
 
             productid = cartelement['productid']
             userid = cartelement['userid']
@@ -1100,12 +1185,16 @@ def addmultipleorder():
             'paymentdate': paymentdate,
             'paymentmethod': paymentmethod,
             'orderlist': orderorderelementids, # Use the list of orderorderelementids
+            'orderid' : orderid
         }
         db.recievedorder.insert_one(data)
 
         # Clear the form fields
         response = jsonify({'message': 'singleorder added successfully'})
         return response
+    except Exception as e:
+        print(f'Error: {e}')  # Added print statement for checking exception
+        return jsonify({'error': 'Failed to add multiple orders'}), 500
 
     except Exception as e:
         # Handle the exception

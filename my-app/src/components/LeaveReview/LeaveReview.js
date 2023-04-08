@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import StarRating from '../Starrating/StarRating'
 
-export default function LeaveReview() {
+export default function LeaveReview({count, setCount}) {
     
     let parms = useParams();
     let productid = parms.id
@@ -69,6 +69,7 @@ export default function LeaveReview() {
         e.preventDefault();
         if (authstate.isloggedin){
             dispatch({ type:'handlesubmit'})
+            setCount(count+1)
         }
         else{
             nav('/signin')

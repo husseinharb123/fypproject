@@ -56,39 +56,25 @@ export default function DashobardSection() {
             </div>
 
             <div className="row">
-              <div className="col-xl-6 col-lg-12">
-                <div className="card mb-4 shadow-sm">
-                  <article className="card-body">
-                    <h5 className="card-title">Sale statistics</h5>
-                    <img
-                      src={image}
-                      style={{
-                        width: "100%",
-                        height: "350px",
-                        objectFit: "contain",
-                      }}
-                      alt=""
-                    />
-                  </article>
-                </div>
-              </div>
-              <div className="col-xl-6 col-lg-12">
-                <div className="card mb-4 shadow-sm">
-                  <article className="card-body">
-                    <h5 className="card-title">Products statistics</h5>
-                    <img
-                      src={image2}
-                      style={{
-                        width: "100%",
-                        height: "350px",
-                        objectFit: "contain",
-                      }}
-                      alt=""
-                    />
-                  </article>
-                </div>
-              </div>
+              
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div className="card mb-4 shadow-sm">
               <div className="card-body">
                 <h5 className="card-title">Latest orders</h5>

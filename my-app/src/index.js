@@ -26,7 +26,6 @@ import StorePageLayout from './Store/StorePageLayout/StorePageLayout'
 //import contexts
 
 import { AuthcontextProvider, AuthContext } from './Contexts/AuthcontextProvider'
-import { ProductDetailContextProvider } from "./Contexts/ProductDetailContextProvider";
 import { BuildStorecontextProvider } from "./Contexts/BuildStorecontextProvider";
 import { ProductFilterProvider } from "./Contexts/ProductsSearchResulTSContext";
 import { AuthStoreContext, AuthStorecontextProvide } from "./Contexts/AuthStorecontextProvider";
@@ -166,12 +165,11 @@ root.render(
   <ProductFilterProvider>
   <AuthStorecontextProvide>
     <AuthcontextProvider>
-      <ProductDetailContextProvider>
         <BuildStorecontextProvider>
           <Main />
         </BuildStorecontextProvider >
         {/* <ScrollToTop /> */}
-      </ProductDetailContextProvider>
+
     </AuthcontextProvider>
   </AuthStorecontextProvide>
   </ProductFilterProvider>

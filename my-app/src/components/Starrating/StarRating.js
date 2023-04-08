@@ -240,7 +240,7 @@ export default function StarRating({ reviews, allowclick, rating, viewreview, fl
 
     useEffect(() => {       
      dispatch({type:'fetchdata',value:rating})
-    },[])
+    },[rating])
     useEffect(() => {
         
         if (state.ratingsubmit){
